@@ -1,7 +1,9 @@
 // APB Slave RAM module
 module apb_ram (
 
-  apb_bus bus
+  apb_bus bus,
+  wire psel
+
 
 );
 
@@ -38,14 +40,6 @@ module apb_ram (
               .wr_data(mem_wr_data),
               .rd_data(mem_rd_data));
 
-  // Initial state assignment
-  initial begin
-    
-    state = IDLE;
-    cyc_count = 0;
-
-  end
-
   // Next state transitions
   always_comb begin
 
@@ -58,7 +52,7 @@ module apb_ram (
 
     case (state)
       IDLE: begin
-        if (bus.psel & !bus.penable) begin
+        if (psel & !bus.penable) begin
           nstate = ACCESS;
         end else begin
           nstate = IDLE;
@@ -85,7 +79,7 @@ module apb_ram (
   end
 
   always @ (posedge bus.pclk or negedge bus.preset)  begin
-    if (bus.preset == 0) begin
+    if (preset == 0) begin
         state <= IDLE;
         cyc_count <= 0;
     end else begin
@@ -117,7 +111,7 @@ module apb_ram (
         mem_ce    = 1'b1;
         mem_wren  = 1'b0;
         mem_rden  = 1'b1;
-        mem_wr_data = 8'b0;
+        mem_wr_data = 16'b0;
         finished  = 1'b0;
       end
       ACCESS: begin
@@ -133,7 +127,7 @@ module apb_ram (
           mem_ce    = 1'b1;
           mem_wren  = 1'b0;
           mem_rden  = 1'b1;
-          mem_wr_data = 8'b0;
+          mem_wr_data = 16'b0;
           finished  = 1'b1;
         end
       end
@@ -150,7 +144,7 @@ module memory (clk, addr, ce, wren, rden, wr_data, rd_data);
   input [15:0] addr, wr_data;
   output reg [15:0] rd_data = 0;
 
-  reg [15:0] mem [0:255];
+  reg [15:0] mem [0:16383];
 
   always @ (posedge clk) 
   if (ce) 
@@ -162,6 +156,3 @@ module memory (clk, addr, ce, wren, rden, wr_data, rd_data);
   end
 
 endmodule
-
-
-//test
