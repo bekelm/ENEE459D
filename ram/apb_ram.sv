@@ -24,9 +24,9 @@ module apb_ram (
   // Memory registers
   logic mem_ce, mem_wren, mem_rden;
 
-  logic [7:0] mem_wr_data;
-  logic [7:0] mem_addr;
-  logic [7:0] mem_rd_data;
+  logic [15:0] mem_wr_data;
+  logic [15:0] mem_addr;
+  logic [15:0] mem_rd_data;
 
   assign bus.prdata = mem_rd_data;
 
@@ -147,10 +147,10 @@ endmodule
 module memory (clk, addr, ce, wren, rden, wr_data, rd_data);
 
   input clk, ce, wren, rden;
-  input [7:0] addr, wr_data;
-  output reg [7:0] rd_data = 0;
+  input [15:0] addr, wr_data;
+  output reg [15:0] rd_data = 0;
 
-  reg [7:0] mem [0:255];
+  reg [15:0] mem [0:255];
 
   always @ (posedge clk) 
   if (ce) 
