@@ -162,3 +162,6 @@ module memory (clk, addr, ce, wren, rden, wr_data, rd_data);
   end
 
 endmodule
+
+
+//test
