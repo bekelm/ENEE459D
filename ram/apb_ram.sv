@@ -85,7 +85,7 @@ module apb_ram (
   end
 
   always @ (posedge bus.pclk or negedge bus.preset)  begin
-    if (preset == 0) begin
+    if (bus.preset == 0) begin
         state <= IDLE;
         cyc_count <= 0;
     end else begin
