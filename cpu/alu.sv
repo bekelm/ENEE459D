@@ -30,7 +30,8 @@ module alu(
     input alu_active,
     apb_bus pbus,
     output reg [15:0] alu_out,
-    output reg alu_out_ready
+    output reg alu_out_ready,
+    output reg psel
     );
     
     localparam IDLE = 2'b00;
@@ -102,7 +103,7 @@ module alu(
                     case (state) 
                         IDLE : begin    
                             pbus.paddr <= reg1 + reg2[6:0];
-                            pbus.psel <= 1'b1;
+                            psel <= 1'b1;
                             pbus.penable <= 1'b0;
                             pbus.pwrite <= 1'b0;
                             next_state <= ACCESS;
@@ -122,7 +123,7 @@ module alu(
                                 alu_out_ready <= 1'b1;
                                 alu_out <= pbus.prdata;
                                 next_state <= IDLE;
-                                pbus.psel <= 1'b0;
+                                psel <= 1'b0;
                                 pbus.penable <= 1'b0;
                             end
                             else begin
@@ -136,7 +137,7 @@ module alu(
                     case (state) 
                         IDLE : begin
                             pbus.paddr <= reg1 + ((IR[12:10]  << 4) + IR[3:0]);
-                            pbus.psel <= 1'b1;
+                            psel <= 1'b1;
                             pbus.penable <= 1'b0;
                             pbus.pwrite <= 1'b1;
                             pbus.pwdata <= reg2;

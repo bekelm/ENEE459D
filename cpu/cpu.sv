@@ -61,6 +61,7 @@ module cpu_data_path(
     output reg [15:0] reg_2_out,
     output reg [15:0] PC_out,
     output reg next_IR,
+    output reg psel,
     //output APB_bus_ctrl,
     
     // APB_Bus
@@ -84,7 +85,7 @@ module cpu_data_path(
           .rd_a_sel(reg_1_sel), .rd_b_sel(reg_2_sel), .rd_a_port(reg_1_out), .rd_b_port(reg_2_out));
     
     alu alu_unit(.clk(clk), .reset(reset), .reg1(alu_r1), .reg2(alu_r2), .IR(IR), .ALU_sel(ALU_sel), .pbus(pbus),
-             .alu_out(alu_out), .alu_out_ready(alu_done), .alu_active(alu_active));
+             .alu_out(alu_out), .alu_out_ready(alu_done), .alu_active(alu_active), .psel(psel));
     
     
     reg [15:0] IR;

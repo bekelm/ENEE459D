@@ -22,7 +22,7 @@
 interface apb_bus (input pclk);
   logic [15:0] paddr;
   logic       pwrite;
-  logic       psel;
+  //logic       psel;
   logic       penable;
   logic [15:0] prdata;
   logic       pready;
@@ -35,7 +35,9 @@ module CPU_master(
     input clk,
     //input data_in,
     input reset,
-    apb_bus pbus//,
+    apb_bus pbus,
+    output reg psel
+    //,
     //apb_bus ir_bus,
     //apb_bus IR_ram//,
    // input [15:0] IR_vals [0:255]
@@ -123,7 +125,7 @@ module CPU_master(
             //PC <= 0;
             ir_write_state <= PC_READ;
             next_state <= PC_READ;
-            pbus.psel <= 1'b0;
+            psel <= 1'b0;
             pbus.penable <= 1'b0;
             //next_IR <= 1'b1;
             begin_instruction <= 1'b0;
@@ -139,7 +141,7 @@ module CPU_master(
                         begin_instruction <= 1'b0;
                     end
                     IDLE : begin
-                        pbus.psel <= 1'b1;
+                        psel <= 1'b1;
                         pbus.penable <= 1'b0;
                         pbus.paddr <= PC;
                         pbus.pwrite <= 1'b0;
@@ -152,7 +154,7 @@ module CPU_master(
                     READ : begin
                         if (pbus.pready == 1'b1 && pbus.prdata != 4'bXXXX) begin
                             IR <= pbus.prdata;
-                            pbus.psel <= 1'b0;
+                            psel <= 1'b0;
                             pbus.penable <= 1'b0;
                             next_state <= PC_READ;
                             begin_instruction <= 1'b1;
