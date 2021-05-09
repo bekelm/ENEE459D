@@ -2,7 +2,7 @@
 module apb_ram (
 
   apb_bus bus,
-  wire psel
+  input wire psel
 
 
 );
@@ -61,7 +61,7 @@ module apb_ram (
       end
       ACCESS: begin
         if (bus.penable) begin
-          if (cyc_count == (2'b01 + WAIT_STATES)) begin
+          if (cyc_count == (2'b00 + WAIT_STATES)) begin
             nstate = IDLE;
             bus.pready = 1'b1;
             cyc_reset = 1'b1;
@@ -69,8 +69,8 @@ module apb_ram (
             nstate = ACCESS;
           end
         end else begin
-          nstate = IDLE;
-          cyc_reset = 1'b1;
+          nstate = ACCESS;
+          //cyc_reset = 1'b1;
         end
       end
 
@@ -79,7 +79,7 @@ module apb_ram (
   end
 
   always @ (posedge bus.pclk or negedge bus.preset)  begin
-    if (preset == 0) begin
+    if (bus.preset == 0) begin
         state <= IDLE;
         cyc_count <= 0;
     end else begin

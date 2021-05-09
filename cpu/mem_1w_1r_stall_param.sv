@@ -7,13 +7,14 @@ module mem_1w_1r_stall_param (
   input [(ADDR_WIDTH-1):0] rdaddress, wraddress,
   input wren,
   //input rd_addressstall,
-  output reg [(DATA_WIDTH-1):0] q
+  output reg [(DATA_WIDTH-1):0] q,
+  input reset
 
 );
 
   parameter FILE = "";
-  parameter ADDR_WIDTH = 4;
-  parameter DATA_WIDTH = 8;
+  parameter ADDR_WIDTH = 3;
+  parameter DATA_WIDTH = 16;
 
   reg [(ADDR_WIDTH-1):0] rdaddress_buf;
   reg [(ADDR_WIDTH-1):0] rdaddress_in;
@@ -66,8 +67,19 @@ module mem_1w_1r_stall_param (
 
   // Write port
   always @ (posedge clock) begin
-    if (wren) begin
+    if (reset == 1'b1) begin
+      ram[0] <= 0;
+      ram[1] <= 0;
+      ram[2] <= 0;
+      ram[3] <= 0;
+      ram[4] <= 0;
+      ram[5] <= 0;
+      ram[6] <= 0;
+      ram[7] <= 0;
+    end
+    else if (wren) begin
       ram[wraddress] <= data;
+      ram[0] <= 0;
     end
   end
 
