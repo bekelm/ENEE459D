@@ -108,8 +108,8 @@ module sd_spi (
       //ld_buf <= {ld_buf[510:0], spi_data_out};
       st_buf <= {8'hFF, st_buf[511:1]};
     end else if (st_buf_enq) begin
-      //ld_buf <= {ld_buf[510:0], spi_data_out};
-      st_buf <= {apb_data_out[7:0], st_buf[511:1]};
+      st_buf <= {st_buf[510:0], apb_data_out[7:0]};
+      //st_buf <= {apb_data_out[7:0], st_buf[511:1]};
     end
 
     if (ctrl_reg_ld) begin

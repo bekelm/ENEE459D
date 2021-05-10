@@ -505,7 +505,7 @@ module sd_ctrl (
       end
       WRITE3: begin    // Write 512 Bytes
         loop_req = 1'b1;
-        loop_req_count = 10'h200;    // TODO: change length
+        loop_req_count = 10'h201;    // TODO: change length
         sd_cmd = 48'hFFFFFFFFFFFF; // Dummy Bytes
         sd_cs = 1'b0;
         tr_req = 1'b0;

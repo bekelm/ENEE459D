@@ -456,7 +456,7 @@ module sd_sim (
         addr_ld   = 1'b0;
         mem_ld    = 1'b0;
         block_count_clr = 1'b0;
-        if (shift_count == 3'b110 && block_count_wr == 12'h1FF) begin
+        if (shift_count == 3'b110 && block_count_wr == 12'h200) begin
           nstate    = WRITE6;
         end else if (shift_count == 3'b110) begin
           nstate    = WRITE5;
