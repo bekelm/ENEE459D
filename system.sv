@@ -56,6 +56,10 @@ module system (
   sd_spi   SPI  (.pbus        (pbus),
                   .psel       (psel_spi),
                   .sbus       (sbus));
+
+  // SD Card Simulator
+  sd_sim   SDSIM (.sbus       (sbus),
+                  .rst        (1'b0));
   
   // APB Bus Address Decoder
   always_comb begin
