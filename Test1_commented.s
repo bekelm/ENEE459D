@@ -1,0 +1,74 @@
+// Write b0010010000100000 to address b0000000000000000
+// b0010010000100000 corresponds to addi r1 <= r0 + 0100000
+address 0000 - 0010010000100000
+
+// Write b0010100000000111 to address b0000000000000001
+// b0010100000000111 corresponds to addi r2 <= r0 + 0000111
+address 0001 - 0010100000000111
+
+// Write b0000110010100000 to address b0000000000000010
+// b0000110010100000 corresponds to addi r3 <= r1 + r2
+address 0010 - 0000110010100000
+
+// Write b0101000010100000 to address b0000000000000011
+// b0101000010100000 corresponds to SUB so that r4 <= r1 - r2
+address 0011 - 0101000010100000
+
+// Write b0011010000011111 to address b0000000000000100
+// b0011010000001111 corresponds to ADDI so that r5 <= r0 + 0011111
+address 0100 - 0011010000011111
+
+// Write b0111100101010000 to address b0000000000000101
+// b0111100101010000 corresponds to NAND r6 <= r2 NAND r5
+address 0101 - 0111100101010000
+
+// Write b100001000000000 to address b0000000000000110
+// b1000 0100 0000 0000 corresponds to BNE if r0 != r0 then PC <= PC + 0010000
+// should not branch since r0 == r0
+address 0110 - 1000010000000000
+
+// Write b1000000000001100 to address b0000000000000111
+// b1000000000000100 corresponds to BNE if r0 != r1 then PC <= PC + 0000100
+// should not branch since r0 == r0
+address 0111 - 1000000000000100
+
+// Filler addresses
+address 1000 - 0000000000000000
+address 1001 - 0000000000000000
+address 1010 - 0000000000000000
+
+// Write b0011110000001101 to address b0000000000001011
+// b0011110000001101 corresponds to ADDI so r7 <= r0 + 0001101 
+address 1011 - 0011110000001101
+
+// Write b1011100001111111 to address b0000000000001100
+// b101 110 000 1111111 corresponds to LW so r6 <= [r0 + 1111111]
+address 1100 - 1011100001111111
+// made sense in original but doesnt anymore so just doing a 0000 op instead
+address 1100 - 0000000000000000
+
+// Write b1110000000010000 to address b0000000000001101
+// b1110000000010000 corresponds to J so PC <= r0 + 0010000
+address 1101 - 1110000000010000
+
+// Filler adddresses
+address 1110 - 0000000000000000
+address 1111 - 0000000000000000
+
+// Write b1100010000111000 to address b0000000000010000
+// b110 001 000 0111000 corresponds to SW so that MEM[r0 + 0011000] <= r3
+address 10000 - 1100010000111000
+
+// Write b101  
+
+address 10001
+
+
+
+
+
+
+
+
+
+

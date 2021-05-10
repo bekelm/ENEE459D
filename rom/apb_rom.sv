@@ -2,12 +2,13 @@
 module apb_rom (
 
   apb_bus bus,
-  wire psel
+  input reg psel
 
 );
+
   parameter  FILE = "";
 
-  parameter  WAIT_STATES = 2'b00;
+  localparam  WAIT_STATES = 2'b00;
   
   localparam IDLE     = 2'b00;
   localparam ACCESS   = 2'b01;
@@ -32,7 +33,7 @@ module apb_rom (
 
   assign bus.prdata = mem_rd_data;
 
-  rom_mem   #(.FILE(FILE)),
+  rom_mem   #(.FILE(FILE)) 
           MEM(.clk(bus.pclk),
               .addr(mem_addr),
               .ce(mem_ce),
@@ -53,7 +54,7 @@ module apb_rom (
 
     case (state)
       IDLE: begin
-        if (psel & !bus.penable) begin
+        if (psel && !bus.penable) begin
           nstate = ACCESS;
         end else begin
           nstate = IDLE;
@@ -70,8 +71,8 @@ module apb_rom (
             nstate = ACCESS;
           end
         end else begin
-          nstate = IDLE;
-          cyc_reset = 1'b1;
+          nstate = ACCESS;
+          //cyc_reset = 1'b1;
         end
       end
 
@@ -80,7 +81,7 @@ module apb_rom (
   end
 
   always @ (posedge bus.pclk or negedge bus.preset)  begin
-    if (preset == 0) begin
+    if (bus.preset == 0) begin
         state <= IDLE;
         cyc_count <= 0;
     end else begin
@@ -147,7 +148,7 @@ module rom_mem (clk, addr, ce, wren, rden, wr_data, rd_data);
 
   reg [15:0] mem [0:16383];
 
-  localparam FILE = "";
+  parameter FILE = "";
 
   initial begin
 

@@ -2,7 +2,7 @@
 module apb_ram (
 
   apb_bus bus,
-  input wire psel
+  input reg psel
 
 
 );
@@ -52,7 +52,7 @@ module apb_ram (
 
     case (state)
       IDLE: begin
-        if (psel & !bus.penable) begin
+        if (psel && !bus.penable) begin
           nstate = ACCESS;
         end else begin
           nstate = IDLE;

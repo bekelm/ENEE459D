@@ -11,27 +11,41 @@ interface apb_bus (input pclk);
   logic       preset;
 endinterface
 
+interface spi_bus();
+  logic       clk;
+  logic       cs;
+  logic       miso;
+  logic       mosi;
+endinterface
+
 
 // Top Level System Module
 module system (
 
-  input clk
+  input clk, 
+  input reset
 
 );
 
+  parameter file = "";
 
   // APB Bus
   apb_bus pbus(clk);
+  
+  // SPI Bus
+  spi_bus sbus();
 
   // Select Lines
-  logic psel_cpu;
+  reg psel_cpu;
   logic psel_rom;
   logic psel_ram;
   logic psel_spi;
 
 
-  // Program ROM Module
-  apb_rom   ROM  (.bus        (pbus),
+  // Program ROM Module  
+ 
+  apb_rom  #(.FILE(file)) ROM  
+                  (.bus        (pbus),
                   .psel       (psel_rom));
 
   // RAM Module
@@ -39,8 +53,9 @@ module system (
                   .psel       (psel_ram));
 
   // SDC Interface
-  apb_spi   SPI  (.bus        (pbus),
-                  .psel       (psel_spi));
+  sd_spi   SPI  (.pbus        (pbus),
+                  .psel       (psel_spi),
+                  .sbus       (sbus));
   
   // APB Bus Address Decoder
   always_comb begin
