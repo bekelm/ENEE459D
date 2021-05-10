@@ -1,11 +1,11 @@
-// APB Slave RAM module
-module apb_ram (
+// APB Slave ROM module
+module apb_rom (
 
   apb_bus bus,
-  input wire psel
-
+  wire psel
 
 );
+  parameter  FILE = "";
 
   parameter  WAIT_STATES = 2'b00;
   
@@ -32,7 +32,8 @@ module apb_ram (
 
   assign bus.prdata = mem_rd_data;
 
-  memory MEM (.clk(bus.pclk),
+  rom_mem   #(.FILE(FILE)),
+          MEM(.clk(bus.pclk),
               .addr(mem_addr),
               .ce(mem_ce),
               .wren(mem_wren),
@@ -61,7 +62,7 @@ module apb_ram (
       end
       ACCESS: begin
         if (bus.penable) begin
-          if (cyc_count == (2'b00 + WAIT_STATES)) begin
+          if (cyc_count == (2'b01 + WAIT_STATES)) begin
             nstate = IDLE;
             bus.pready = 1'b1;
             cyc_reset = 1'b1;
@@ -69,8 +70,8 @@ module apb_ram (
             nstate = ACCESS;
           end
         end else begin
-          nstate = ACCESS;
-          //cyc_reset = 1'b1;
+          nstate = IDLE;
+          cyc_reset = 1'b1;
         end
       end
 
@@ -79,7 +80,7 @@ module apb_ram (
   end
 
   always @ (posedge bus.pclk or negedge bus.preset)  begin
-    if (bus.preset == 0) begin
+    if (preset == 0) begin
         state <= IDLE;
         cyc_count <= 0;
     end else begin
@@ -138,7 +139,7 @@ module apb_ram (
 endmodule
 
 
-module memory (clk, addr, ce, wren, rden, wr_data, rd_data);
+module rom_mem (clk, addr, ce, wren, rden, wr_data, rd_data);
 
   input clk, ce, wren, rden;
   input [15:0] addr, wr_data;
@@ -146,13 +147,23 @@ module memory (clk, addr, ce, wren, rden, wr_data, rd_data);
 
   reg [15:0] mem [0:16383];
 
+  localparam FILE = "";
+
+  initial begin
+
+    if (FILE != "") begin
+
+      $readmemh(FILE, mem);
+      
+    end
+
+  end
+
   always @ (posedge clk) 
   if (ce) 
   begin
      if (rden) 
          rd_data <= mem[addr];
-     else if (wren) 
-         mem[addr] <= wr_data;
   end
 
 endmodule
