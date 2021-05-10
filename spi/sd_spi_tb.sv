@@ -23,16 +23,14 @@ module sd_spi_tb();
   apb_bus pbus(clk);
   spi_bus sbus();
 
-/*
   // Request Bridge Inputs
-  reg [7:0] addr_req;
+  reg [15:0] addr_req;
   reg req;
   reg wr_req;
-  reg [7:0] data_send;
-  wire [7:0] data_reciv;
+  reg [15:0] data_send;
+  wire [15:0] data_reciv;
   wire ack;
   wire complete;
-*/
 
 
   logic psel_spi;
@@ -44,9 +42,6 @@ module sd_spi_tb();
   sd_sim   SDSIM (.sbus       (sbus),
                   .rst        (1'b0));
 
-  /*
-  apb_slave     #(.WAIT_STATES(0))  // Number of peripheral wait states
-            SLV  (.bus        (pbus));
 
   apb_master MST (.addr_req   (addr_req),
                   .req        (req),
@@ -55,20 +50,18 @@ module sd_spi_tb();
                   .data_reciv (data_reciv),
                   .ack        (ack),
                   .complete   (complete),
-                  .pbus       (pbus));
-  */
+                  .pbus       (pbus),
+                  .psel       (psel_spi));
 
 
   initial begin
     
     clk = 1'b0;
 
-    /*
     addr_req  = 8'h0;
     req       = 1'b0;
     wr_req    = 1'b0;
     data_send = 8'h0;
-    */
 
   end
 
@@ -80,6 +73,16 @@ module sd_spi_tb();
 
     $dumpfile ("sd_spi_tb.vcd");
     $dumpvars (0, sd_spi_tb);
+
+    #500000
+
+    @ (posedge clk);
+    #1;
+    addr_req  = 16'h03;
+    req       = 1'b1;
+    wr_req    = 1'b1;
+    data_send = 16'h01;
+    @ (posedge ack);
     
     /*
     @ (posedge clk);
@@ -103,7 +106,9 @@ module sd_spi_tb();
     @ (posedge clk);
     */
 
-    #1500000
+    #1000000
+
+    //#1500000
 
     $finish;
 

@@ -22,7 +22,7 @@ module sd_apb_ctrl (
   localparam INVALID  = 2'b11;
 
   // APB State registers
-  logic [1:0] state;
+  logic [1:0] state = IDLE;
   logic [1:0] nstate;
 
   logic [1:0] cyc_count;

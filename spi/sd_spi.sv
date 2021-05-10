@@ -62,20 +62,6 @@ module sd_spi (
               .busy         (busy_sdc),
               .ctrl_reg_clr (ctrl_reg_clr),
               .sd_cs        (sbus.cs));
-/*
-  // SD Controller
-  sd_ctrl SDC(.clk    (pbus.pclk),
-              .sck_pulse  (sck_pulse),
-              .sd_en  (sd_en),
-              .sd_rdy (sd_rdy),
-              .mosi_re(mosi_re),
-              .miso_re(miso_re),
-              .sd_rdy (sd_rdy),
-              .sck_pulse (sck_pulse),
-              .spi_sck(sbus.sck),
-              .spi_cs (sbus.cs),
-              .mosi_sel(mosi_sel));
-              */
 
   
   // APB Controller
@@ -146,19 +132,5 @@ module sd_spi (
 
   assign st_buf_out = st_buf[0];
 
-/*
-  // MOSI Mux
-  always_comb begin
-
-    if (spi_data_in_sel == MOSI_SD) begin
-      
-      spi_data_in = mosi_sd_out;
-
-    end else begin
-
-    end
-
-  end
-  */
 
 endmodule
